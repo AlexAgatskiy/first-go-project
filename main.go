@@ -9,17 +9,22 @@ import (
 	"github.com/AlexAgatskiy/go-todo-cli/internal/app"
 )
 
+// Зачем это здесь?
 type Task struct {
 	id   int
 	text string
 	done bool
 }
+
+// Аналогичный верхнему вопрос.
 type TaskManag struct { // менеджер задач
 	tasks  []Task
 	nextID int
 }
 
 func main() {
+	// app.NewTaskManager() - конвенциональный нейминг для конструктора
+	// какой-либо сущности. Переименовать.
 	taskManager := app.TaskManager()
 
 	scanner := bufio.NewScanner(os.Stdin)

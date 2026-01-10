@@ -12,8 +12,11 @@ func TaskManager() *TaskManag {
 		nextTaskID:  1,
 		nextEventID: 1,
 	} // конструктор для TaskManag
+	// комментарии-документация пишется перед словом объявлением сущности, в
+	// данном случае перед func ... (см. пример ниже). Исправить по всему коду.
 }
 
+// AddTask - добавляет новые задачи в список.
 func (tm *TaskManag) AddTask(text string) (int, error) {
 	if text == "" {
 		return 0, fmt.Errorf("текст задачи не может быть пустым")
@@ -26,6 +29,11 @@ func (tm *TaskManag) AddTask(text string) (int, error) {
 	}
 	tm.tasks = append(tm.tasks, task)
 
+	// "add", "list", ... - упоминаются по всей программе как в модуле main, так
+	// и в этом. Представь, что тебе надо будет переименовать "add" в "append"
+	// (требование руководства, которого пока нет). Ты будешь это делать в
+	// нескольких местах - а мог бы в одном. Вынеси эти строки в константы
+	// (для этого хорошо подходит файл types.go).
 	tm.addEvent("add", tm.nextTaskID, text) // событие
 
 	id := tm.nextTaskID
@@ -52,6 +60,8 @@ func (tm *TaskManag) AllEvents() []Event {
 }
 
 func (tm *TaskManag) DeleteTask(id int) error {
+	// На подумать: почему для хранения задач был выбран слайс (динамический
+	// массив)? Какие плюсы и минусы были бы от решения с мапой?
 	for i, task := range tm.tasks {
 		if task.ID == id {
 
