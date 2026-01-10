@@ -6,7 +6,14 @@ import (
 	"strings"
 )
 
+// Хорошая идея ввести прослойку предобработки ввиде данных функций. Но все
+// неявные ошибки (`fmt.Println("Ошибка: укажите текст задачи")`, ...) лучше
+// возвращать как ошибки - а что с ними делать (падать или просто писать в лог
+// или fmt.Println) пусть решает внешний пакет (main).
+
 func ProccesAdd(slova []string, tm *TaskManag) {
+	// Неинтуитивно - во внешнем скоупе я бы отправлял slova[1:] - то есть сам
+	// текст задачи. Тогда здесь не было бы magic number'а '2' ( ... < 2).
 	if len(slova) < 2 {
 		fmt.Println("Ошибка: укажите текст задачи")
 		fmt.Println("Пример: add Купить молоко")
@@ -16,6 +23,8 @@ func ProccesAdd(slova []string, tm *TaskManag) {
 	taskText := strings.Join(slova[1:], " ")
 	id, err := tm.AddTask(taskText)
 	if err != nil {
+		// Тут должно быть возвращение ошибки. См. самый верхний комментарий в
+		// этом файле
 		fmt.Printf("Ошибка: %v\n", err)
 		return
 	}
@@ -130,6 +139,9 @@ func ProccesDelete(slova []string, tm *TaskManag) {
 	fmt.Printf("Задача %d удалена\n", taskID)
 }
 
+// Вместо множественного обращения к функции fmt.Println и создания подстрок,
+// посмотри в сторону raw string (`такая строка`) - она нечуствительна к разрыву
+// строк и ты можешь использовать ее для длинных текстов, как этот.
 func ProccesHelp() {
 	fmt.Println("=== TO-DO List Справка ===")
 	fmt.Println("")
